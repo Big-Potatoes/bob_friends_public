@@ -15,5 +15,5 @@ public class SignUpRequest {
     @NotEmpty
     private String password;
     @NotEmpty
-    private String name;
+    private String nickname;
 }

@@ -5,7 +5,7 @@ import com.bobfriend.bobfriends.controller.auth.dto.request.SignInRequest;
 import com.bobfriend.bobfriends.controller.auth.dto.request.SignUpRequest;
 import com.bobfriend.bobfriends.controller.auth.dto.request.TokenRefreshRequest;
 import com.bobfriend.bobfriends.controller.auth.dto.request.UserResponse;
-import com.bobfriend.bobfriends.controller.auth.dto.response.SingInResponse;
+import com.bobfriend.bobfriends.controller.auth.dto.response.SignInResponse;
 import com.bobfriend.bobfriends.controller.auth.dto.response.TokenRefreshResponse;
 import com.bobfriend.bobfriends.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +22,7 @@ public class AuthController {
 
     @Operation(summary = "로그인")
     @PostMapping(value = "/auth/sign-in")
-    public SingInResponse signIn(@RequestBody SignInRequest signInRequest) {
+    public SignInResponse signIn(@RequestBody SignInRequest signInRequest) {
         return authService.signIn(signInRequest);
     }
 

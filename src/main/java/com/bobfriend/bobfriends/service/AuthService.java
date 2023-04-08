@@ -5,7 +5,7 @@ import com.bobfriend.bobfriends.controller.auth.dto.request.SignInRequest;
 import com.bobfriend.bobfriends.controller.auth.dto.request.SignUpRequest;
 import com.bobfriend.bobfriends.controller.auth.dto.request.TokenRefreshRequest;
 import com.bobfriend.bobfriends.controller.auth.dto.request.UserResponse;
-import com.bobfriend.bobfriends.controller.auth.dto.response.SingInResponse;
+import com.bobfriend.bobfriends.controller.auth.dto.response.SignInResponse;
 import com.bobfriend.bobfriends.controller.auth.dto.response.TokenRefreshResponse;
 import com.bobfriend.bobfriends.domain.auth.User;
 import com.bobfriend.bobfriends.domain.auth.UserRefreshToken;
@@ -36,7 +36,7 @@ public class AuthService {
 
         userRepository.save(User.builder()
                 .account(signUpRequest.getAccount())
-                .name(signUpRequest.getName())
+                .nickname(signUpRequest.getNickname())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
                 .build());
     }
@@ -51,7 +51,7 @@ public class AuthService {
     }
 
     @SneakyThrows
-    public SingInResponse signIn(SignInRequest signInRequest) {
+    public SignInResponse signIn(SignInRequest signInRequest) {
         final String userAccount = signInRequest.getAccount();
         final String password = passwordEncoder.encode(signInRequest.getPassword());
         User user = userRepository.findByAccountAndPassword(userAccount, password);
@@ -62,7 +62,7 @@ public class AuthService {
         String accessToken = jwtTokenProvider.createToken(userAccount, JwtTokenProvider.Type.ACCESS);
         String refreshToken = jwtTokenProvider.createToken(userAccount, JwtTokenProvider.Type.REFRESH);
         updateRefreshToken(userAccount, refreshToken);
-        return new SingInResponse(accessToken, refreshToken);
+        return new SignInResponse(accessToken, refreshToken);
     }
 
     public TokenRefreshResponse refreshToken(TokenRefreshRequest tokenRefreshRequest) {
@@ -92,7 +92,7 @@ public class AuthService {
         return UserResponse.builder()
                 .id(user.getId())
                 .account(user.getAccount())
-                .name(user.getName())
+                .nickname(user.getNickname())
                 .build();
     }
 
