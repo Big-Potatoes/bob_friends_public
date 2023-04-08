@@ -14,11 +14,11 @@ import com.bobfriend.bobfriends.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.security.sasl.AuthenticationException;
 import java.util.Objects;
 
 @Slf4j
@@ -55,8 +55,8 @@ public class AuthService {
         final String userAccount = signInRequest.getAccount();
         final String password = passwordEncoder.encode(signInRequest.getPassword());
         User user = userRepository.findByAccountAndPassword(userAccount, password);
-        if (Objects.nonNull(user)) {
-            throw new AuthenticationException();
+        if (Objects.isNull(user)) {
+            throw new BadCredentialsException("계정 정보가 맞지 않습니다.");
         }
 
         String accessToken = jwtTokenProvider.createToken(userAccount, JwtTokenProvider.Type.ACCESS);
