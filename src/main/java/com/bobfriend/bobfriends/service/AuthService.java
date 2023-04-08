@@ -53,9 +53,8 @@ public class AuthService {
     @SneakyThrows
     public SignInResponse signIn(SignInRequest signInRequest) {
         final String userAccount = signInRequest.getAccount();
-        final String password = passwordEncoder.encode(signInRequest.getPassword());
-        User user = userRepository.findByAccountAndPassword(userAccount, password);
-        if (Objects.isNull(user)) {
+        User user = userRepository.findByAccount(userAccount);
+        if (Objects.isNull(user) || !passwordEncoder.matches(signInRequest.getPassword(), user.getPassword())) {
             throw new BadCredentialsException("계정 정보가 맞지 않습니다.");
         }
 
