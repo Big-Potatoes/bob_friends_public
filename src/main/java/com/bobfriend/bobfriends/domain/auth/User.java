@@ -26,4 +26,6 @@ public class User extends BaseEntity {
     private String password;
     @Column(name = "nickname", nullable = false)
     private String nickname;
+    @Column(name = "local_certification", nullable = false)
+    private boolean localCertification;
 }

@@ -11,4 +11,5 @@ public class UserResponse {
     private Long id;
     private String account;
     private String nickname;
+    private boolean localCertification;
 }

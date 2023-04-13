@@ -92,6 +92,7 @@ public class AuthService {
                 .id(user.getId())
                 .account(user.getAccount())
                 .nickname(user.getNickname())
+                .localCertification(user.isLocalCertification())
                 .build();
     }
 
