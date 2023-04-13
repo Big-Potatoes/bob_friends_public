@@ -1,6 +1,7 @@
 package com.bobfriend.bobfriends.config.security.provider;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -66,12 +67,16 @@ public class JwtTokenProvider {
     }
 
     public String getUserId(String token, Type type) {
-        return Jwts.parserBuilder()
-                .setSigningKey(keyEnumMap.get(type))
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(keyEnumMap.get(type))
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims().getSubject();
+        }
     }
 
     public boolean validateToken(String token, Type type) {
