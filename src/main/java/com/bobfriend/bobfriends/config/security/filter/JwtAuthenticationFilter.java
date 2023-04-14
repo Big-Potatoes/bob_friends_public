@@ -2,6 +2,7 @@ package com.bobfriend.bobfriends.config.security.filter;
 
 import com.bobfriend.bobfriends.config.security.provider.JwtTokenProvider;
 import lombok.SneakyThrows;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -40,6 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
+            response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
