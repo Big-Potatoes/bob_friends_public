@@ -22,10 +22,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         List<String> excludeUrl = List.of(
-                "/auth/sign-in",
-                "/auth/token-refresh",
-                "/auth/sign-up",
-                "/recruit-contents"
+                "/api/auth/sign-in",
+                "/api/auth/token-refresh",
+                "/api/auth/sign-up",
+                "/api/recruit-contents"
         );
         return excludeUrl.contains(request.getRequestURI());
     }
