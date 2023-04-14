@@ -17,6 +17,8 @@ spring:
       ddl-auto: none
 logging:
   level:
+    root:
+      debug
     org:
       hibernate: info
 
