@@ -26,7 +26,7 @@ public class RecruitContentDetailResponse {
     // 픽업정보
     private PickupLocationResponse pickupLocation;
     // 배달비 정보
-    private DeliveryPriceResponse deliveryPrice;
+    private int deliveryPrice;
     // 메뉴리스트
     private List<String> menus = List.of(
             "메뉴1",
@@ -48,7 +48,7 @@ public class RecruitContentDetailResponse {
         this.endDateTime = endDateTime;
         this.storeLocation = new StoreLocationResponse();
         this.pickupLocation = new PickupLocationResponse(locationDescription);
-        this.deliveryPrice = new DeliveryPriceResponse(3000, peopleCount, totalPeopleCount);
+        this.deliveryPrice = 3000;
     }
 
     public static RecruitContentDetailResponse createDummy(RecruitContentResponse contentResponse) {
