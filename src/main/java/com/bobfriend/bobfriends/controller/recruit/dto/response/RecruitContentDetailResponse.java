@@ -1,6 +1,7 @@
 package com.bobfriend.bobfriends.controller.recruit.dto.response;
 
 import com.bobfriend.bobfriends.constant.Constants;
+import com.bobfriend.bobfriends.domain.recruit.JoinUser;
 import com.bobfriend.bobfriends.domain.recruit.RecruitContent;
 import com.bobfriend.bobfriends.domain.tag.Tag;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -35,6 +36,7 @@ public class RecruitContentDetailResponse {
     private int deliveryPrice;
     // 메뉴리스트
     private List<MenuResponse> menus;
+    private List<String> joinUserAccounts;
 
     public RecruitContentDetailResponse(RecruitContent recruitContent, List<Tag> tags) {
         this.id = recruitContent.getId();
@@ -53,6 +55,9 @@ public class RecruitContentDetailResponse {
                 .collect(Collectors.toList());
         this.menus = recruitContent.getMenus().stream()
                 .map(MenuResponse::new)
+                .collect(Collectors.toList());
+        this.joinUserAccounts = recruitContent.getJoinUsers().stream()
+                .map(JoinUser::getUserAccount)
                 .collect(Collectors.toList());
     }
 }
