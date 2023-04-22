@@ -86,7 +86,7 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody()
                 .getExpiration()
-                .before(new Date());
+                .after(new Date());
     }
 
     public String resolveToken(HttpServletRequest request) {

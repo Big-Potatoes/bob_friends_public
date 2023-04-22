@@ -25,6 +25,7 @@ logging:
       debug
     org:
       hibernate: info
+    root: debug
 
 cloud:
   aws:
