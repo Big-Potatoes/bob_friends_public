@@ -5,7 +5,6 @@ import com.bobfriend.bobfriends.controller.recruit.dto.request.RecruitContentReq
 import com.bobfriend.bobfriends.controller.recruit.dto.request.RecruitCreateRequest;
 import com.bobfriend.bobfriends.controller.recruit.dto.response.RecruitContentDetailResponse;
 import com.bobfriend.bobfriends.controller.recruit.dto.response.RecruitContentResponse;
-import com.bobfriend.bobfriends.domain.recruit.JoinUser;
 import com.bobfriend.bobfriends.domain.recruit.RecruitContent;
 import com.bobfriend.bobfriends.domain.tag.Tag;
 import com.bobfriend.bobfriends.service.recruit.RecruitContentService;
@@ -26,6 +25,7 @@ public class RecruitContentController {
     private final RecruitContentService recruitContentService;
     private final TagService tagService;
 
+    @Operation(summary = "모집글 등록")
     @PostMapping("/recruit-contents")
     public void create(@Parameter(hidden = true) @UserAccount String account,
                        @RequestBody RecruitCreateRequest createRequest) {
@@ -33,7 +33,7 @@ public class RecruitContentController {
         recruitContentService.create(createRequest);
     }
 
-    @Operation(summary = "모집글 리스트 조회 (더미데이터)")
+    @Operation(summary = "모집글 리스트 조회")
     @GetMapping("/recruit-contents")
     public Page<RecruitContentResponse> getContents(RecruitContentRequest request) {
        Page<RecruitContent> recruitContents = recruitContentService.getContents(request);
@@ -42,15 +42,16 @@ public class RecruitContentController {
                .collect(Collectors.toList());
        Map<Long, List<Tag>> tagMap = tagService.findByContentIds(contentIds).stream()
                .collect(Collectors.groupingBy(Tag::getRecruitContentId));
-        Map<Long, List<JoinUser>> joinUserMap = recruitContentService.findJoinUserByContentIds(contentIds).stream()
-                .collect(Collectors.groupingBy(JoinUser::getRecruitContentId));
 
-        return recruitContents.map(it -> new RecruitContentResponse(it, tagMap.get(it.getId()), joinUserMap.get(it.getId())));
+        return recruitContents.map(it -> new RecruitContentResponse(it, tagMap.get(it.getId())));
     }
 
-    @Operation(summary = "모집글 상세 (더미데이터)")
+    @Operation(summary = "모집글 상세")
     @GetMapping("/recruit-content/{id}")
     public RecruitContentDetailResponse getContentById(@PathVariable Long id) {
-        return null;
+        RecruitContent recruitContent = recruitContentService.getDetails(id);
+        List<Tag> tags = tagService.findByContentId(recruitContent.getId());
+
+        return new RecruitContentDetailResponse(recruitContent, tags);
     }
 }

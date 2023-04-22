@@ -15,7 +15,11 @@ import java.util.List;
 public class TagService {
     private final TagRepository tagRepository;
 
-    public List<Tag> findByContentIds(Collection<Long> contentIds) {
-        return tagRepository.findByRecruitContentIdIn(contentIds);
+    public List<Tag> findByContentIds(Collection<Long> recruitContentIds) {
+        return tagRepository.findByRecruitContentIdIn(recruitContentIds);
+    }
+
+    public List<Tag> findByContentId(Long recruitContentId) {
+        return tagRepository.findByRecruitContentId(recruitContentId);
     }
 }

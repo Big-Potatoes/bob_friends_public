@@ -1,12 +1,17 @@
 package com.bobfriend.bobfriends.controller.recruit.dto.response;
 
 import com.bobfriend.bobfriends.constant.Constants;
+import com.bobfriend.bobfriends.domain.recruit.RecruitContent;
+import com.bobfriend.bobfriends.domain.tag.Tag;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -21,7 +26,7 @@ public class RecruitContentDetailResponse {
     private LocalDateTime createDateTime;
     @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
     private LocalDateTime endDateTime;
-    private String content = "모집합니다요~~~ 또~~ 오래오래~~ ";
+    private String content;
     // 지점정보
     private StoreLocationResponse storeLocation;
     // 픽업정보
@@ -29,40 +34,25 @@ public class RecruitContentDetailResponse {
     // 배달비 정보
     private int deliveryPrice;
     // 메뉴리스트
-    private List<MenuResponse> menus = List.of(
-            new MenuResponse("메뉴1", 1000, 3),
-            new MenuResponse("메뉴2", 2000, 5),
-            new MenuResponse("메뉴3", 3000, 1)
-    );
+    private List<MenuResponse> menus;
 
-    public RecruitContentDetailResponse(Long id, List<String> tags, String title, String writer,
-                                        String locationDescription, int peopleCount, int totalPeopleCount,
-                                        LocalDateTime createDateTime, LocalDateTime endDateTime) {
-
-        this.id = id;
-        this.tags = tags;
-        this.title = title;
-        this.writer = writer;
-        this.peopleCount = peopleCount;
-        this.totalPeopleCount = totalPeopleCount;
-        this.createDateTime = createDateTime;
-        this.endDateTime = endDateTime;
-        this.storeLocation = new StoreLocationResponse();
-        this.pickupLocation = new PickupLocationResponse(locationDescription);
-        this.deliveryPrice = 3000;
-    }
-
-    public static RecruitContentDetailResponse createDummy(RecruitContentResponse contentResponse) {
-        return new RecruitContentDetailResponse(
-                contentResponse.getId(),
-                contentResponse.getTags(),
-                contentResponse.getTitle(),
-                contentResponse.getWriter(),
-                contentResponse.getLocationDescription(),
-                contentResponse.getPeopleCount(),
-                contentResponse.getTotalPeopleCount(),
-                contentResponse.getCreateDateTime(),
-                contentResponse.getEndDateTime()
-        );
+    public RecruitContentDetailResponse(RecruitContent recruitContent, List<Tag> tags) {
+        this.id = recruitContent.getId();
+        this.title = recruitContent.getTitle();
+        this.writer = recruitContent.getWriter();
+        this.content = recruitContent.getContent();
+        this.deliveryPrice = recruitContent.getDeliveryPrice();
+        this.peopleCount = recruitContent.getJoinUsers().size();
+        this.totalPeopleCount = recruitContent.getPeopleCount();
+        this.endDateTime = recruitContent.getEndDateTime();
+        this.createDateTime = recruitContent.getCreateDateTime();
+        this.storeLocation = new StoreLocationResponse(recruitContent.getStoreLocation());
+        this.pickupLocation = new PickupLocationResponse(recruitContent.getPickupLocation(), recruitContent.getPickupImages());
+        this.tags = CollectionUtils.isEmpty(tags) ? Collections.emptyList() : tags.stream()
+                .map(Tag::getName)
+                .collect(Collectors.toList());
+        this.menus = recruitContent.getMenus().stream()
+                .map(MenuResponse::new)
+                .collect(Collectors.toList());
     }
 }

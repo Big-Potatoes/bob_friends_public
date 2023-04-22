@@ -1,22 +1,16 @@
 package com.bobfriend.bobfriends.controller.recruit.dto.request;
 
-import com.bobfriend.bobfriends.domain.menu.Menu;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class MenuRequest {
+    @Schema(description = "메뉴 명")
     private String name;
+    @Schema(description = "가격")
     private int price;
+    @Schema(description = "수량")
     private int count;
-
-    public Menu getMenu(Long recruitContentId, String userAccount) {
-        return Menu.builder()
-                .recruitContentId(recruitContentId)
-                .userAccount(userAccount)
-                .count(count)
-                .price(price)
-                .build();
-    }
 }

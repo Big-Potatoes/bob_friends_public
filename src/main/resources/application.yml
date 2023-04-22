@@ -1,4 +1,3 @@
-
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -13,6 +12,8 @@ spring:
         show_sql: true
         format_sql: true
         use_sql_comments: true
+        jdbc:
+          default_batch_fetch_size: 50
     hibernate:
       ddl-auto: none
   servlet:

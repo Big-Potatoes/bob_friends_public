@@ -1,7 +1,6 @@
 package com.bobfriend.bobfriends.controller.recruit.dto.response;
 
 import com.bobfriend.bobfriends.constant.Constants;
-import com.bobfriend.bobfriends.domain.recruit.JoinUser;
 import com.bobfriend.bobfriends.domain.recruit.RecruitContent;
 import com.bobfriend.bobfriends.domain.tag.Tag;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -33,12 +32,12 @@ public class RecruitContentResponse {
     @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
     private LocalDateTime endDateTime;
 
-    public RecruitContentResponse(RecruitContent recruitContent, List<Tag> tags, List<JoinUser> joinUsers) {
+    public RecruitContentResponse(RecruitContent recruitContent, List<Tag> tags) {
         this.id = recruitContent.getId();
         this.writer = recruitContent.getWriter();
         this.title = recruitContent.getTitle();
         this.locationDescription = recruitContent.getLocationDescription();
-        this.peopleCount = CollectionUtils.isEmpty(joinUsers) ? 0 : joinUsers.size();
+        this.peopleCount = recruitContent.getJoinUsers().size();
         this.totalPeopleCount = recruitContent.getPeopleCount();
         this.tags = CollectionUtils.isEmpty(tags) ? Collections.emptyList() : tags.stream()
                 .map(Tag::getName)

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +17,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@BatchSize(size = 50)
 @Table(name = "files")
 public class File extends BaseEntity {
     @Id
@@ -34,6 +36,10 @@ public class File extends BaseEntity {
 
     @Column(name = "bytes")
     private long bytes;
+
+    public File(String id) {
+        this.id = id;
+    }
 
     public static File multipartOf(MultipartFile multipartFile) {
         final String fileId = MultipartUtil.createFileId();

@@ -1,0 +1,2 @@
+app:
+  host: http://ec2-13-209-72-206.ap-northeast-2.compute.amazonaws.com:8080

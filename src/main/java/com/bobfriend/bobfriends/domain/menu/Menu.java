@@ -1,6 +1,7 @@
 package com.bobfriend.bobfriends.domain.menu;
 
 import com.bobfriend.bobfriends.domain.BaseEntity;
+import com.bobfriend.bobfriends.domain.recruit.RecruitContent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,9 +22,6 @@ public class Menu extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "recruit_content_id")
-    private Long recruitContentId;
-
     @Column(name = "user_account")
     private String userAccount;
 
@@ -35,4 +33,12 @@ public class Menu extends BaseEntity {
 
     @Column(name = "price")
     private Integer price;
+
+    @ManyToOne
+    @JoinColumn(name = "recruit_content_id")
+    private RecruitContent recruitContent;
+
+    public void setRecruitContent(RecruitContent recruitContent) {
+        this.recruitContent = recruitContent;
+    }
 }

@@ -1,10 +1,7 @@
 package com.bobfriend.bobfriends.domain.recruit;
 
 import com.bobfriend.bobfriends.domain.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -21,9 +18,14 @@ public class JoinUser extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "recruit_content_id")
-    private Long recruitContentId;
-
     @Column(name = "user_account")
     private String userAccount;
+
+    @ManyToOne
+    @JoinColumn(name = "recruit_content_id")
+    private RecruitContent recruitContent;
+
+    public void setRecruitContent(RecruitContent recruitContent) {
+        this.recruitContent = recruitContent;
+    }
 }
