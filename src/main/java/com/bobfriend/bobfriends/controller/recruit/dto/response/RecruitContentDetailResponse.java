@@ -28,10 +28,10 @@ public class RecruitContentDetailResponse {
     // 배달비 정보
     private int deliveryPrice;
     // 메뉴리스트
-    private List<String> menus = List.of(
-            "메뉴1",
-            "메뉴2",
-            "메뉴3"
+    private List<MenuResponse> menus = List.of(
+            new MenuResponse("메뉴1", 1000, 3),
+            new MenuResponse("메뉴2", 2000, 5),
+            new MenuResponse("메뉴3", 3000, 1)
     );
 
     public RecruitContentDetailResponse(Long id, List<String> tags, String title, String writer,
