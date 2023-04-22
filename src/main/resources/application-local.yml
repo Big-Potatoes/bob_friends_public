@@ -1,2 +1,7 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+
 app:
   host: http://localhost:8080
