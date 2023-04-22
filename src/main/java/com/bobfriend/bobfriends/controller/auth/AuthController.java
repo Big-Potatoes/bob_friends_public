@@ -7,7 +7,7 @@ import com.bobfriend.bobfriends.controller.auth.dto.request.TokenRefreshRequest;
 import com.bobfriend.bobfriends.controller.auth.dto.request.UserResponse;
 import com.bobfriend.bobfriends.controller.auth.dto.response.SignInResponse;
 import com.bobfriend.bobfriends.controller.auth.dto.response.TokenRefreshResponse;
-import com.bobfriend.bobfriends.service.AuthService;
+import com.bobfriend.bobfriends.service.auth.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;

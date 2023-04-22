@@ -1,4 +1,4 @@
-package com.bobfriend.bobfriends.service;
+package com.bobfriend.bobfriends.service.auth;
 
 import com.bobfriend.bobfriends.config.security.provider.JwtTokenProvider;
 import com.bobfriend.bobfriends.controller.auth.dto.request.SignInRequest;
