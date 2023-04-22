@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -46,4 +47,11 @@ public class RecruitContent extends BaseEntity {
 
     @Embedded
     private PickupLocation pickupLocation;
+
+    public String getLocationDescription() {
+        if (Objects.isNull(pickupLocation)) {
+            return null;
+        }
+        return pickupLocation.getDescription();
+    }
 }

@@ -5,27 +5,26 @@ import com.bobfriend.bobfriends.controller.recruit.dto.request.RecruitContentReq
 import com.bobfriend.bobfriends.controller.recruit.dto.request.RecruitCreateRequest;
 import com.bobfriend.bobfriends.controller.recruit.dto.response.RecruitContentDetailResponse;
 import com.bobfriend.bobfriends.controller.recruit.dto.response.RecruitContentResponse;
+import com.bobfriend.bobfriends.domain.recruit.JoinUser;
+import com.bobfriend.bobfriends.domain.recruit.RecruitContent;
+import com.bobfriend.bobfriends.domain.tag.Tag;
 import com.bobfriend.bobfriends.service.recruit.RecruitContentService;
+import com.bobfriend.bobfriends.service.tag.TagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @RestController
 @RequiredArgsConstructor
 public class RecruitContentController {
     private final RecruitContentService recruitContentService;
-    private List<RecruitContentResponse> dummyList;
+    private final TagService tagService;
 
     @PostMapping("/recruit-contents")
     public void create(@Parameter(hidden = true) @UserAccount String account,
@@ -34,43 +33,24 @@ public class RecruitContentController {
         recruitContentService.create(createRequest);
     }
 
-    @PostConstruct
-    public void init() {
-        Random random = new Random();
-        dummyList = IntStream.range(0, 100)
-                .mapToObj(it -> {
-                    int totalCount = random.nextInt(9) + 2;
-                    int count = random.nextInt(totalCount - 1) + 1;
-
-                    RecruitContentResponse recruitContentResponse = new RecruitContentResponse();
-                    recruitContentResponse.setId((long) (it + 1));
-                    recruitContentResponse.setTotalPeopleCount(totalCount);
-                    recruitContentResponse.setPeopleCount(count);
-                    recruitContentResponse.setTitle(String.format("%s-%s", recruitContentResponse.getTitle(), it + 1));
-                    recruitContentResponse.setCreateDateTime(LocalDateTime.now().plusMinutes(random.nextInt(60)));
-                    recruitContentResponse.setEndDateTime(recruitContentResponse.getCreateDateTime().plusMinutes(random.nextInt(60)));
-                    return recruitContentResponse;
-                }).collect(Collectors.toList());
-    }
-
     @Operation(summary = "모집글 리스트 조회 (더미데이터)")
     @GetMapping("/recruit-contents")
     public Page<RecruitContentResponse> getContents(RecruitContentRequest request) {
-       List<RecruitContentResponse> pageList = dummyList.stream()
-               .skip((long) request.getPageNumber() * request.getPageSize())
-               .limit(request.getPageSize())
+       Page<RecruitContent> recruitContents = recruitContentService.getContents(request);
+       List<Long> contentIds = recruitContents.getContent().stream()
+               .map(RecruitContent::getId)
                .collect(Collectors.toList());
+       Map<Long, List<Tag>> tagMap = tagService.findByContentIds(contentIds).stream()
+               .collect(Collectors.groupingBy(Tag::getRecruitContentId));
+        Map<Long, List<JoinUser>> joinUserMap = recruitContentService.findJoinUserByContentIds(contentIds).stream()
+                .collect(Collectors.groupingBy(JoinUser::getRecruitContentId));
 
-        return new PageImpl<>(pageList, request.getPageable(), dummyList.size());
+        return recruitContents.map(it -> new RecruitContentResponse(it, tagMap.get(it.getId()), joinUserMap.get(it.getId())));
     }
 
     @Operation(summary = "모집글 상세 (더미데이터)")
     @GetMapping("/recruit-content/{id}")
     public RecruitContentDetailResponse getContentById(@PathVariable Long id) {
-        return dummyList.stream()
-                .filter(it -> Objects.equals(it.getId(), id))
-                .findFirst()
-                .map(RecruitContentDetailResponse::createDummy)
-                .orElse(null);
+        return null;
     }
 }

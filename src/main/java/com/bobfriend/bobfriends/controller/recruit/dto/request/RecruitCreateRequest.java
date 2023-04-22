@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -30,6 +31,7 @@ public class RecruitCreateRequest {
     @NotEmpty
     private String content;
     private int deliveryPrice;
+    @Min(1)
     private int peopleCount;
     @NotNull
     @DateTimeFormat(pattern = Constants.DATE_TIME_FORMAT)

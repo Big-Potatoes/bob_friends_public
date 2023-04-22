@@ -1,14 +1,17 @@
 package com.bobfriend.bobfriends.service.recruit;
 
+import com.bobfriend.bobfriends.controller.recruit.dto.request.RecruitContentRequest;
 import com.bobfriend.bobfriends.controller.recruit.dto.request.RecruitCreateRequest;
+import com.bobfriend.bobfriends.domain.recruit.JoinUser;
 import com.bobfriend.bobfriends.domain.recruit.RecruitContent;
-import com.bobfriend.bobfriends.repository.MenuRepository;
-import com.bobfriend.bobfriends.repository.PickupImageRepository;
-import com.bobfriend.bobfriends.repository.RecruitContentRepository;
-import com.bobfriend.bobfriends.repository.TagRepository;
+import com.bobfriend.bobfriends.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.List;
 
 @Service
 @Transactional
@@ -18,6 +21,7 @@ public class RecruitContentService {
     private final TagRepository tagRepository;
     private final PickupImageRepository pickupImageRepository;
     private final MenuRepository menuRepository;
+    private final JoinUserRepository joinUserRepository;
 
     public void create(RecruitCreateRequest createRequest) {
         RecruitContent recruitContent = createRequest.getRecruitContent();
@@ -28,5 +32,16 @@ public class RecruitContentService {
         tagRepository.saveAll(createRequest.getTags(recruitContentId));
         pickupImageRepository.saveAll(createRequest.getPickupImages(recruitContentId));
         menuRepository.saveAll(createRequest.getMenus(recruitContentId, userAccount));
+        joinUserRepository.save(JoinUser.builder()
+                        .recruitContentId(recruitContentId)
+                        .userAccount(userAccount).build());
+    }
+
+    public Page<RecruitContent> getContents(RecruitContentRequest request) {
+        return recruitContentRepository.findAll(request.getPageable());
+    }
+
+    public List<JoinUser> findJoinUserByContentIds(Collection<Long> contentIds) {
+        return joinUserRepository.findByRecruitContentIdIn(contentIds);
     }
 }
