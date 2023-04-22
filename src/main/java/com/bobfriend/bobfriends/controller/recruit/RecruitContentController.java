@@ -1,15 +1,17 @@
 package com.bobfriend.bobfriends.controller.recruit;
 
+import com.bobfriend.bobfriends.config.web.UserAccount;
 import com.bobfriend.bobfriends.controller.recruit.dto.request.RecruitContentRequest;
+import com.bobfriend.bobfriends.controller.recruit.dto.request.RecruitCreateRequest;
 import com.bobfriend.bobfriends.controller.recruit.dto.response.RecruitContentDetailResponse;
 import com.bobfriend.bobfriends.controller.recruit.dto.response.RecruitContentResponse;
+import com.bobfriend.bobfriends.service.recruit.RecruitContentService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
@@ -22,7 +24,15 @@ import java.util.stream.IntStream;
 @RestController
 @RequiredArgsConstructor
 public class RecruitContentController {
+    private final RecruitContentService recruitContentService;
     private List<RecruitContentResponse> dummyList;
+
+    @PostMapping("/recruit-contents")
+    public void create(@Parameter(hidden = true) @UserAccount String account,
+                       @RequestBody RecruitCreateRequest createRequest) {
+        createRequest.setWriter(account);
+        recruitContentService.create(createRequest);
+    }
 
     @PostConstruct
     public void init() {

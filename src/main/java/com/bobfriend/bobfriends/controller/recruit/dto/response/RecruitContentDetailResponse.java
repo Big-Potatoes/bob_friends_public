@@ -1,5 +1,6 @@
 package com.bobfriend.bobfriends.controller.recruit.dto.response;
 
+import com.bobfriend.bobfriends.constant.Constants;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,9 +17,9 @@ public class RecruitContentDetailResponse {
     private String writer;
     private int peopleCount;
     private int totalPeopleCount;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
     private LocalDateTime createDateTime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
     private LocalDateTime endDateTime;
     private String content = "모집합니다요~~~ 또~~ 오래오래~~ ";
     // 지점정보
