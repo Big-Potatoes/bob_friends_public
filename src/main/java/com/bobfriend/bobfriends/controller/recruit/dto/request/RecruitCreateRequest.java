@@ -42,6 +42,8 @@ public class RecruitCreateRequest {
     @Schema(description = "모집종료시간", format = Constants.DATE_TIME_FORMAT, defaultValue = "2023-12-31 23:59:59")
     private LocalDateTime endDateTime;
 
+    @Schema(description = "가게 설명")
+    private String storeLocationDescription;
     @NotEmpty
     @Schema(description = "가게 주소")
     private String storeLocationAddress;
@@ -120,6 +122,7 @@ public class RecruitCreateRequest {
 
     private StoreLocation getStoreLocation() {
         return StoreLocation.builder()
+                .description(storeLocationDescription)
                 .address(storeLocationAddress)
                 .latitude(storeLocationLatitude)
                 .longitude(storeLocationLongitude)

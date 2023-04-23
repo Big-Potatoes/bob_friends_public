@@ -14,6 +14,9 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoreLocation {
+    @Column(name = "store_location_description")
+    private String description;
+
     @Column(name = "store_location_address")
     private String address;
 

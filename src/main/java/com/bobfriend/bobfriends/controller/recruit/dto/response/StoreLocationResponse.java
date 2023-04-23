@@ -9,11 +9,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class StoreLocationResponse {
+    private String locationDescription;
     private String address;
     private double latitude;
     private double longitude;
 
     public StoreLocationResponse(StoreLocation storeLocation) {
+        this.locationDescription = storeLocation.getDescription();
         this.address = storeLocation.getAddress();
         this.latitude = storeLocation.getLatitude();
         this.longitude = storeLocation.getLongitude();
