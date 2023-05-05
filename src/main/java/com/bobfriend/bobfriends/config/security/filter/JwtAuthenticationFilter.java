@@ -25,10 +25,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = jwtTokenProvider.resolveToken(request);
             if (token != null && jwtTokenProvider.validateToken(token, JwtTokenProvider.Type.ACCESS)) {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
-                authentication.setAuthenticated(true);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
+            logger.error("token error", e);
             response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
